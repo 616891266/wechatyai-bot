@@ -38,3 +38,9 @@
 
 
 >我看到多语言版本有JAVA版本，马上就下载下来试一下能不能运行。没有详细看后面的文档、这导致我把[JAVA版本Demo](https://github.com/wechaty/java-wechaty-getting-started)下载下来一直运行不起来、后面仔细看了文档之后才知道需要部署一个网关服务、而且要在公网的服务器上面、希望后面的开发不要走我这个弯路、好好查看文档。
+
+
+## Copyright & License
+* Code & Docs © 2020 Wechaty Contributors [https://github.com/wechaty](https://github.com/wechaty)
+* Code released under the Apache-2.0 License
+* Docs released under Creative Commons

@@ -11,7 +11,7 @@
     <groupId>com.smwsk</groupId>
     <artifactId>wechaty-bot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>bot</name>
+    <name>wechaty-bot</name>
     <description>微信智能机器人</description>
 
     <properties>
