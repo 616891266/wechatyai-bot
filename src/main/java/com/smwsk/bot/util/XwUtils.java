@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.smwsk.bot.constant.SysConstant;
 import com.smwsk.bot.entity.XwRespMsg;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,11 +34,11 @@ public class XwUtils {
 	 * @param sendMsg 用户发送消息
 	 * @return
 	 */
-	public XwRespMsg getRespMsg(String sendMsg){
+	public XwRespMsg getRespMsg(String userName,String sendMsg){
 		String requestUrl = "https://openai.weixin.qq.com/openapi/aibot/"+ xwToken;
 		logger.info("getMsgBy-start:{}", LocalDateTime.now());
 		Map<String,Object> requestParams = new HashMap<>();
-		requestParams.put("signature", SysConstant.xwSignature);
+		requestParams.put("signature", getSignInfo(userName));
 		requestParams.put("query", sendMsg);
 		requestParams.put("env", evn);
 		String resultInfo = HttpUtil.requestPost(requestUrl, requestParams);
@@ -47,18 +48,19 @@ public class XwUtils {
 	}
 
 
-	public void getSignInfo(){
+	public String getSignInfo(String userName){
 		String requestUrl = "https://openai.weixin.qq.com/openapi/sign/"+ xwToken;
 		logger.info("updateSignature-start:{}", LocalDateTime.now());
 		Map<String,Object> requestParams = new HashMap<>();
-		requestParams.put("userid", "smwsk0");
+		requestParams.put("userid", userName);
 		String resultInfo = HttpUtil.requestPost(requestUrl, requestParams);
 		logger.info("request result:{}", resultInfo);
 		JSONObject resultJson = (JSONObject) JSONObject.parse(resultInfo);
 		if(resultJson != null){
-			SysConstant.xwSignature = resultJson.getString("signature");
 			logger.info("update xwSignature data:{}", SysConstant.xwSignature);
+			return resultJson.getString("signature");
 		}
+		return StringUtils.EMPTY;
 	}
 
 }
