@@ -68,6 +68,11 @@
                 System.out.println("serviceToken:-->"+cookie.getValue());
                 break;
             }
+            if (cookie!=null&&"cUserId".equals(cookie.getName())){
+                //小爱同学cUserId
+                System.out.println("cUserId:-->"+cookie.getValue());
+                break;
+            }
         }
         driver.quit();
     }
@@ -83,7 +88,8 @@
 * API文档：https://wechaty.js.org/api
 * Padplus Token 进行多语言开发指南 https://github.com/wechaty/wechaty/issues/1985
 
-
+### 联系我 有什么问题欢迎打扰
+![微信](http://47.112.21.193:9997/wx.jpg)
 
 ## Copyright & License
 [![Powered by Wechaty](https://img.shields.io/badge/Powered%20By-Wechaty-green.svg)](https://github.com/chatie/wechaty)
