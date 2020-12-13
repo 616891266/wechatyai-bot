@@ -20,4 +20,5 @@ public enum AnswerTypeEnum {
 		this.code = code;
 		this.remark = remark;
 	}
+
 }

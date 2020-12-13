@@ -1,13 +1,13 @@
 package com.smwsk.bot.task;
 
 import com.smwsk.bot.constant.SysConstant;
-import com.smwsk.bot.entity.XwRespMsg;
-import com.smwsk.bot.util.MsgUtils;
+import com.smwsk.bot.util.MessageProcessingUtils;
 import com.smwsk.bot.util.XwUtils;
 import io.github.wechaty.LoginListener;
 import io.github.wechaty.RoomJoinListener;
 import io.github.wechaty.RoomLeaveListener;
 import io.github.wechaty.Wechaty;
+import io.github.wechaty.filebox.FileBox;
 import io.github.wechaty.io.github.wechaty.schemas.EventEnum;
 import io.github.wechaty.schemas.FriendshipType;
 import io.github.wechaty.schemas.RoomQueryFilter;
@@ -20,11 +20,11 @@ import io.github.wechaty.utils.QrcodeUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -65,6 +65,7 @@ public class BotThread implements Runnable {
 		wechaty.onRoomJoin(new RoomJoinListener() {
 			@Override
 			public void handler(@NotNull Room room, @NotNull List<? extends Contact> list, @NotNull Contact contact, @NotNull Date date) {
+				room.say("欢迎："+contact.name()+"加入该群！");
 				logger.info("joinRoomName: {}, contactListSize:{}, contactName: {}, dateTime:{}", room.getTopic(), list.size(), contact.name(), date);
 			}
 		});
@@ -73,6 +74,7 @@ public class BotThread implements Runnable {
 		wechaty.onRoomLeave(new RoomLeaveListener(){
 			@Override
 			public void handler(@NotNull Room room, @NotNull List<? extends Contact> list, @NotNull Contact contact, @NotNull Date date) {
+				room.say(contact.name()+"走了，离群了！！");
 				logger.info("leaveRoomName: {}, contactListSize: {}, contactName: {}, dateTime:{}", room.getTopic(), list.size(), contact.name(), date);
 			}
 		});
@@ -126,30 +128,41 @@ public class BotThread implements Runnable {
 			Contact contact = message.to(); // 发送给哪个用户
 			Room room = message.room();
 
-			if(SysConstant.loginUserName.equals(message.from().name())){ // 自己发送出去的消息不做处理
-				return;
-			}
+			if (text.substring(0,2).contains("#")) {
+				try{
+					if (room != null) {
+						String txt=text.replaceAll("#","");
+						if (txt.contains("漫画")){
+							String[] biz= MessageProcessingUtils.findBizs("biz");
+							for (String s : biz) {
+								FileBox fileBox = FileBox.fromUrl(s,null,null);
+								room.say(fileBox);
+							}
+							room.say("好的！");
+							return;
+						}
+						if (txt.contains("cos")){
+							String[] biz= MessageProcessingUtils.findBizs("cos");
+							for (String s : biz) {
+								FileBox fileBox = FileBox.fromUrl(s,null,null);
+								room.say(fileBox);
+							}
+							room.say("好的！");
+							return;
+						}
+						Map<String,Object> map= MessageProcessingUtils.onMessage(txt);
+						room.say("@"+message.from().name()+" "+map.get("text").toString());
+						if (map.get("image")!=null){
+							FileBox fileBox = FileBox.fromUrl(map.get("image").toString(),null,null);
+							room.say(fileBox);
+							System.err.println("已回复图片！！");
+						}
+					}
+					System.err.println("已回复！！");
+				}catch (Exception e){
+					e.printStackTrace();
+				}
 
-			if (contact.name().contains("微信")
-					|| from.name().contains("微信")
-					|| from.name().contains("文件传输助手")) {
-				return;
-			}
-			if (room != null && message.mentionSelf()) {
-				String mentionText = message.mentionText();
-				if(StringUtils.isEmpty(mentionText)){
-					room.say("你想对我说什么呢？");
-					return;
-				}
-				XwRespMsg respMsg = xwUtils.getRespMsg(from.name(),mentionText);
-				if (respMsg != null) {
-					MsgUtils.sendRoomMsg(room, respMsg);
-				}
-			} else if (room == null && contact != null) {
-				XwRespMsg respMsg = xwUtils.getRespMsg(from.name(), text);
-				if (respMsg != null) {
-					MsgUtils.sendContactMsg(from, respMsg);
-				}
 			}
 		});
 		wechaty.start(true);
