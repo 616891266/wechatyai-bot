@@ -89,6 +89,7 @@
 * Padplus Token 进行多语言开发指南 https://github.com/wechaty/wechaty/issues/1985
 
 ### 联系我 有什么问题欢迎打扰
+微信号：wwwlolcn
 ![微信](http://47.112.21.193:9997/wx.jpg)
 
 ## Copyright & License
