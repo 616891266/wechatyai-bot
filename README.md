@@ -12,7 +12,7 @@
 * [小爱同学开放平台](https://developers.xiaoai.mi.com/) 注册账号，下面有获取token教程
 
 ## 项目信息
-* [项目地址]() 
+* [项目地址](https://github.com/616891266/wechatyai-bot) 
 
 ## 小爱同学token获取
 * 获取过程比较复杂，不细讲了，直接贴代码，因为我服务器用的是centos，所以跟windwos不太一样。
