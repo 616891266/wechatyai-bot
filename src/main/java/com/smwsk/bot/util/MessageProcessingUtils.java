@@ -33,7 +33,7 @@ public class MessageProcessingUtils {
                 .ignoreContentType(true)
                 .data("query",msg)
                 .method(Connection.Method.GET)
-                .header("Cookie","serviceToken="+token+"; cUserId=LQinxd1gHg0Yw6IkV2q-1VebXsw;")
+                .header("Cookie","serviceToken="+token+"; cUserId= ;")
                 .execute().body();
         JSONObject answer=JSON.parseObject(resultJson).getJSONArray("answer").getJSONObject(0);
         map.put("text",answer.getJSONObject("content").getString("to_speak"));
